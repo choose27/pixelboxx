@@ -21,7 +21,7 @@ export class ActivityController {
    */
   @Get('friends')
   async getFriendsFeed(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -34,7 +34,7 @@ export class ActivityController {
    */
   @Get('me')
   async getMyActivity(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {

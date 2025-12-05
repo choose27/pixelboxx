@@ -27,7 +27,7 @@ export class NotificationsController {
    */
   @Get()
   async list(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
     @Query('type') type?: NotificationType,
@@ -40,7 +40,7 @@ export class NotificationsController {
    * GET /notifications/unread-count
    */
   @Get('unread-count')
-  async getUnreadCount(@Request() req) {
+  async getUnreadCount(@Request() req: any) {
     return this.notificationsService.getUnreadCount(req.user.userId);
   }
 
@@ -49,7 +49,7 @@ export class NotificationsController {
    * POST /notifications/:id/read
    */
   @Post(':id/read')
-  async markRead(@Request() req, @Param('id') notificationId: string) {
+  async markRead(@Request() req: any, @Param('id') notificationId: string) {
     return this.notificationsService.markRead(req.user.userId, notificationId);
   }
 
@@ -58,7 +58,7 @@ export class NotificationsController {
    * POST /notifications/read-all
    */
   @Post('read-all')
-  async markAllRead(@Request() req) {
+  async markAllRead(@Request() req: any) {
     return this.notificationsService.markAllRead(req.user.userId);
   }
 
@@ -67,7 +67,7 @@ export class NotificationsController {
    * DELETE /notifications/:id
    */
   @Delete(':id')
-  async delete(@Request() req, @Param('id') notificationId: string) {
+  async delete(@Request() req: any, @Param('id') notificationId: string) {
     return this.notificationsService.delete(req.user.userId, notificationId);
   }
 
@@ -76,7 +76,7 @@ export class NotificationsController {
    * GET /notifications/preferences
    */
   @Get('preferences')
-  async getPreferences(@Request() req) {
+  async getPreferences(@Request() req: any) {
     return this.notificationsService.getPreferences(req.user.userId);
   }
 
@@ -85,7 +85,7 @@ export class NotificationsController {
    * PUT /notifications/preferences
    */
   @Put('preferences')
-  async updatePreferences(@Request() req, @Body() dto: UpdateNotificationPreferencesDto) {
+  async updatePreferences(@Request() req: any, @Body() dto: UpdateNotificationPreferencesDto) {
     return this.notificationsService.updatePreferences(req.user.userId, dto);
   }
 }

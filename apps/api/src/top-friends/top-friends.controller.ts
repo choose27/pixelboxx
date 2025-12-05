@@ -23,7 +23,7 @@ export class TopFriendsController {
    * GET /me/top-friends
    */
   @Get()
-  async getTopFriends(@Request() req) {
+  async getTopFriends(@Request() req: any) {
     return this.topFriendsService.getTopFriends(req.user.userId);
   }
 
@@ -32,7 +32,7 @@ export class TopFriendsController {
    * GET /me/top-friends/featured-in
    */
   @Get('featured-in')
-  async getTopFriendOf(@Request() req) {
+  async getTopFriendOf(@Request() req: any) {
     return this.topFriendsService.getTopFriendOf(req.user.userId);
   }
 
@@ -41,7 +41,7 @@ export class TopFriendsController {
    * PUT /me/top-friends
    */
   @Put()
-  async updateTopFriends(@Request() req, @Body() dto: UpdateTopFriendsDto) {
+  async updateTopFriends(@Request() req: any, @Body() dto: UpdateTopFriendsDto) {
     return this.topFriendsService.updateTopFriends(req.user.userId, dto);
   }
 
@@ -51,7 +51,7 @@ export class TopFriendsController {
    */
   @Delete(':position')
   async removeFromPosition(
-    @Request() req,
+    @Request() req: any,
     @Param('position', ParseIntPipe) position: number,
   ) {
     return this.topFriendsService.removeFromPosition(req.user.userId, position);

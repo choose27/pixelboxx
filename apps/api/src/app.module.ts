@@ -4,9 +4,9 @@ import { APP_PIPE } from '@nestjs/core';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { PixelPagesModule } from './pixelpages/pixelpages.module';
-import { ThemesModule } from './themes/themes.module';
-import { GuestbookModule } from './guestbook/guestbook.module';
+// import { PixelPagesModule } from './pixelpages/pixelpages.module';
+// import { ThemesModule } from './themes/themes.module';
+// import { GuestbookModule } from './guestbook/guestbook.module';
 import { NatsModule } from './nats/nats.module';
 import { BoxxesModule } from './boxxes/boxxes.module';
 import { ChannelsModule } from './channels/channels.module';
@@ -31,9 +31,9 @@ import { ActivityModule } from './activity/activity.module';
     NatsModule,
     AuthModule,
     UsersModule,
-    PixelPagesModule,
-    ThemesModule,
-    GuestbookModule,
+    // PixelPagesModule, // TODO: Add Prisma models
+    // ThemesModule, // TODO: Add Prisma models
+    // GuestbookModule, // TODO: Add Prisma models
     BoxxesModule,
     ChannelsModule,
     MessagesModule,

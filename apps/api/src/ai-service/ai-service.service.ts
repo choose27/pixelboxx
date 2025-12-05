@@ -1,7 +1,8 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import * as FormData from 'form-data';
+import { AxiosResponse } from 'axios';
+import FormData from 'form-data';
 
 export interface DesignPreferences {
   dark_mode?: boolean;
@@ -54,7 +55,7 @@ export class AiServiceService {
         formData.append('preferences', JSON.stringify(preferences));
       }
 
-      const response = await firstValueFrom(
+      const response: AxiosResponse<DesignResult> = await firstValueFrom(
         this.httpService.post(
           `${this.aiServiceUrl}/design/from-image`,
           formData,
@@ -86,7 +87,7 @@ export class AiServiceService {
     preferences?: DesignPreferences,
   ): Promise<DesignResult> {
     try {
-      const response = await firstValueFrom(
+      const response: AxiosResponse<DesignResult> = await firstValueFrom(
         this.httpService.post(
           `${this.aiServiceUrl}/design/from-description`,
           {
@@ -171,7 +172,7 @@ export class AiServiceService {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      const response = await firstValueFrom(
+      const response: AxiosResponse = await firstValueFrom(
         this.httpService.get(`${this.aiServiceUrl}/health`),
       );
       return response.status === 200;

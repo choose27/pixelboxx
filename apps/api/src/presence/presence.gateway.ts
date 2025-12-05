@@ -47,6 +47,11 @@ export class PresenceGateway implements OnGatewayConnection, OnGatewayDisconnect
       const payload = this.jwtService.verify(token);
       client.userId = payload.sub;
 
+      if (!client.userId) {
+        client.disconnect();
+        return;
+      }
+
       // Set user as online
       await this.presenceService.setOnline(client.userId);
 

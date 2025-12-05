@@ -22,7 +22,7 @@ export class FollowersController {
    * POST /follow/:userId
    */
   @Post(':userId')
-  async follow(@Request() req, @Param('userId') followingId: string) {
+  async follow(@Request() req: any, @Param('userId') followingId: string) {
     return this.followersService.follow(req.user.userId, followingId);
   }
 
@@ -31,7 +31,7 @@ export class FollowersController {
    * DELETE /follow/:userId
    */
   @Delete(':userId')
-  async unfollow(@Request() req, @Param('userId') followingId: string) {
+  async unfollow(@Request() req: any, @Param('userId') followingId: string) {
     return this.followersService.unfollow(req.user.userId, followingId);
   }
 
@@ -41,7 +41,7 @@ export class FollowersController {
    */
   @Get('/me/followers')
   async getMyFollowers(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -54,7 +54,7 @@ export class FollowersController {
    */
   @Get('/me/following')
   async getMyFollowing(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -66,7 +66,7 @@ export class FollowersController {
    * GET /me/follow-stats
    */
   @Get('/me/follow-stats')
-  async getMyFollowStats(@Request() req) {
+  async getMyFollowStats(@Request() req: any) {
     return this.followersService.getCounts(req.user.userId);
   }
 }

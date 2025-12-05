@@ -22,7 +22,7 @@ export class BlocksController {
    * POST /block/:userId
    */
   @Post(':userId')
-  async block(@Request() req, @Param('userId') blockedId: string) {
+  async block(@Request() req: any, @Param('userId') blockedId: string) {
     return this.blocksService.block(req.user.userId, blockedId);
   }
 
@@ -31,7 +31,7 @@ export class BlocksController {
    * DELETE /block/:userId
    */
   @Delete(':userId')
-  async unblock(@Request() req, @Param('userId') blockedId: string) {
+  async unblock(@Request() req: any, @Param('userId') blockedId: string) {
     return this.blocksService.unblock(req.user.userId, blockedId);
   }
 
@@ -41,7 +41,7 @@ export class BlocksController {
    */
   @Get('/me/blocked')
   async listBlocked(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -53,7 +53,7 @@ export class BlocksController {
    * GET /block/check/:userId
    */
   @Get('check/:userId')
-  async checkBlocked(@Request() req, @Param('userId') otherUserId: string) {
+  async checkBlocked(@Request() req: any, @Param('userId') otherUserId: string) {
     const isBlocked = await this.blocksService.isBlocked(req.user.userId, otherUserId);
     const hasBlocked = await this.blocksService.hasBlocked(req.user.userId, otherUserId);
 

@@ -118,9 +118,11 @@ export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect
 
       // Unsubscribe from previous channel if any
       const existingKey = `channel:${data.channelId}`;
-      const existingSub = client.subscriptions.get(existingKey);
-      if (existingSub) {
-        await existingSub.unsubscribe();
+      if (client.subscriptions) {
+        const existingSub = client.subscriptions.get(existingKey);
+        if (existingSub) {
+          await existingSub.unsubscribe();
+        }
       }
 
       // Subscribe to new channel
@@ -128,7 +130,9 @@ export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect
         client.emit('message', message);
       });
 
-      client.subscriptions.set(existingKey, subscription);
+      if (client.subscriptions) {
+        client.subscriptions.set(existingKey, subscription);
+      }
 
       // Join Socket.IO room for channel
       client.join(`channel:${data.channelId}`);
@@ -153,7 +157,9 @@ export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect
 
     if (subscription) {
       await subscription.unsubscribe();
-      client.subscriptions.delete(key);
+      if (client.subscriptions) {
+        client.subscriptions.delete(key);
+      }
     }
 
     client.leave(`channel:${data.channelId}`);

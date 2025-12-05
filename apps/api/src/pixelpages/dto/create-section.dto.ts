@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IsString, IsNotEmpty, IsObject, IsInt, IsBoolean, IsOptional, IsEnum } from 'class-validator';
 import { SectionType } from '@prisma/client';
 

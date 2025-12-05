@@ -90,6 +90,10 @@ export class PresenceService implements OnModuleInit {
     const results = await pipeline.exec();
     const onlineMap = new Map();
 
+    if (!results) {
+      return onlineMap;
+    }
+
     userIds.forEach((userId, index) => {
       const [err, data] = results[index];
       if (!err && data) {

@@ -22,7 +22,7 @@ export class FriendsController {
    * POST /friends/request/:userId
    */
   @Post('request/:userId')
-  async sendRequest(@Request() req, @Param('userId') addresseeId: string) {
+  async sendRequest(@Request() req: any, @Param('userId') addresseeId: string) {
     return this.friendsService.sendRequest(req.user.userId, addresseeId);
   }
 
@@ -31,7 +31,7 @@ export class FriendsController {
    * POST /friends/accept/:requestId
    */
   @Post('accept/:requestId')
-  async acceptRequest(@Request() req, @Param('requestId') requestId: string) {
+  async acceptRequest(@Request() req: any, @Param('requestId') requestId: string) {
     return this.friendsService.acceptRequest(req.user.userId, requestId);
   }
 
@@ -40,7 +40,7 @@ export class FriendsController {
    * POST /friends/reject/:requestId
    */
   @Post('reject/:requestId')
-  async rejectRequest(@Request() req, @Param('requestId') requestId: string) {
+  async rejectRequest(@Request() req: any, @Param('requestId') requestId: string) {
     return this.friendsService.rejectRequest(req.user.userId, requestId);
   }
 
@@ -49,7 +49,7 @@ export class FriendsController {
    * DELETE /friends/:userId
    */
   @Delete(':userId')
-  async removeFriend(@Request() req, @Param('userId') friendId: string) {
+  async removeFriend(@Request() req: any, @Param('userId') friendId: string) {
     return this.friendsService.removeFriend(req.user.userId, friendId);
   }
 
@@ -59,7 +59,7 @@ export class FriendsController {
    */
   @Get()
   async listFriends(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -72,7 +72,7 @@ export class FriendsController {
    */
   @Get('requests')
   async listIncomingRequests(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -85,7 +85,7 @@ export class FriendsController {
    */
   @Get('requests/sent')
   async listSentRequests(
-    @Request() req,
+    @Request() req: any,
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ) {
@@ -97,7 +97,7 @@ export class FriendsController {
    * GET /friends/status/:userId
    */
   @Get('status/:userId')
-  async getFriendshipStatus(@Request() req, @Param('userId') otherUserId: string) {
+  async getFriendshipStatus(@Request() req: any, @Param('userId') otherUserId: string) {
     return this.friendsService.getFriendshipStatus(req.user.userId, otherUserId);
   }
 }

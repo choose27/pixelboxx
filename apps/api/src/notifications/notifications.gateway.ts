@@ -7,9 +7,8 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Inject } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import { JwtService } from '@nestjs/jwt';
+import { NatsService } from '../nats/nats.service';
 
 @WebSocketGateway({
   namespace: 'notifications',
@@ -26,7 +25,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
   private natsSubscriptions: Map<string, any> = new Map();
 
   constructor(
-    @Inject('NATS_CLIENT') private natsClient: ClientProxy,
+    private natsService: NatsService,
     private jwtService: JwtService,
   ) {}
 
@@ -47,7 +46,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       if (!this.userSockets.has(userId)) {
         this.userSockets.set(userId, new Set());
       }
-      this.userSockets.get(userId).add(client.id);
+      this.userSockets.get(userId)!.add(client.id);
 
       // Join user-specific room
       client.join(`user:${userId}`);
@@ -91,7 +90,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
     const subject = `pixelboxx.users.${userId}.notifications`;
 
-    const subscription = this.natsClient.subscribe(subject).subscribe((notification) => {
+    const subscription = await this.natsService.subscribe(subject, (notification: any) => {
       // Emit to all of user's connected sockets
       this.server.to(`user:${userId}`).emit('notification', notification);
     });
