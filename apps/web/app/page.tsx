@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { ParticleCanvas } from "@/components/ui/ParticleCanvas";
@@ -36,8 +37,12 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex gap-sm">
-                <Button variant="ghost">Sign In</Button>
-                <Button variant="primary">Get Started</Button>
+                <Link href="/editor">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Link href="/editor">
+                  <Button variant="primary">Get Started</Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -82,29 +87,33 @@ export default function Home() {
                 className="mt-xl flex flex-wrap justify-center gap-md animate-fadeInUp"
                 style={{ animationDelay: "0.6s" }}
               >
-                <Button variant="primary" size="large">
-                  Create Your PixelPage
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </Button>
-                <Button variant="ghost" size="large">
-                  Explore Features
-                </Button>
+                <Link href="/editor">
+                  <Button variant="primary" size="large">
+                    Create Your PixelPage
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Button>
+                </Link>
+                <a href="#features">
+                  <Button variant="ghost" size="large">
+                    Explore Features
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="relative py-3xl">
+        <section id="features" className="relative py-3xl">
           <div className="container mx-auto max-w-[1400px] px-lg">
             <div className="mt-2xl grid grid-cols-1 gap-lg md:grid-cols-2 lg:grid-cols-3">
               <FeatureCard
