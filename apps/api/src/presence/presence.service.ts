@@ -10,21 +10,49 @@ export enum UserStatus {
 
 @Injectable()
 export class PresenceService implements OnModuleInit {
-  private redis: Redis;
+  private redis: Redis | null = null;
   private readonly TTL = 300; // 5 minutes
 
   constructor(private configService: ConfigService) {}
 
   async onModuleInit() {
-    const redisUrl = this.configService.get('REDIS_URL') || 'redis://localhost:6379';
-    this.redis = new Redis(redisUrl);
-    console.log(`Connected to Redis at ${redisUrl}`);
+    const redisUrl = this.configService.get('REDIS_URL');
+
+    if (!redisUrl) {
+      console.log('REDIS_URL not set - presence features disabled');
+      return;
+    }
+
+    console.log(`Connecting to Redis: ${redisUrl.replace(/:[^:@]+@/, ':****@')}`);
+
+    // Upstash requires TLS
+    this.redis = new Redis(redisUrl, {
+      tls: redisUrl.startsWith('rediss://') ? {} : undefined,
+      maxRetriesPerRequest: 3,
+      enableReadyCheck: false,
+      lazyConnect: true,
+    });
+
+    // Handle connection errors gracefully
+    this.redis.on('error', (err) => {
+      console.error('Redis connection error:', err.message);
+    });
+
+    try {
+      await this.redis.connect();
+      console.log('Successfully connected to Redis');
+    } catch (err) {
+      console.error('Failed to connect to Redis, presence features disabled:', err.message);
+      this.redis = null;
+    }
   }
 
   /**
    * Set user as online
    */
   async setOnline(userId: string, customStatus?: string): Promise<void> {
+    if (!this.redis) return;
+
     const key = `presence:${userId}`;
     const data = {
       status: UserStatus.ONLINE,
@@ -39,6 +67,8 @@ export class PresenceService implements OnModuleInit {
    * Set user as idle
    */
   async setIdle(userId: string): Promise<void> {
+    if (!this.redis) return;
+
     const key = `presence:${userId}`;
     const existing = await this.getStatus(userId);
 
@@ -55,6 +85,8 @@ export class PresenceService implements OnModuleInit {
    * Set user as offline
    */
   async setOffline(userId: string): Promise<void> {
+    if (!this.redis) return;
+
     const key = `presence:${userId}`;
     await this.redis.del(key);
   }
@@ -67,6 +99,10 @@ export class PresenceService implements OnModuleInit {
     customStatus?: string;
     lastSeen?: string;
   } | null> {
+    if (!this.redis) {
+      return { status: UserStatus.OFFLINE };
+    }
+
     const key = `presence:${userId}`;
     const data = await this.redis.get(key);
 
@@ -81,6 +117,12 @@ export class PresenceService implements OnModuleInit {
    * Get online members in a boxx
    */
   async getOnlineMembers(userIds: string[]): Promise<Map<string, any>> {
+    const onlineMap = new Map();
+
+    if (!this.redis) {
+      return onlineMap;
+    }
+
     const pipeline = this.redis.pipeline();
 
     for (const userId of userIds) {
@@ -88,7 +130,6 @@ export class PresenceService implements OnModuleInit {
     }
 
     const results = await pipeline.exec();
-    const onlineMap = new Map();
 
     if (!results) {
       return onlineMap;
@@ -108,6 +149,8 @@ export class PresenceService implements OnModuleInit {
    * Heartbeat to keep user online
    */
   async heartbeat(userId: string): Promise<void> {
+    if (!this.redis) return;
+
     const key = `presence:${userId}`;
     const existing = await this.getStatus(userId);
 
@@ -122,6 +165,8 @@ export class PresenceService implements OnModuleInit {
    * Set custom status message
    */
   async setCustomStatus(userId: string, customStatus: string): Promise<void> {
+    if (!this.redis) return;
+
     const existing = await this.getStatus(userId);
     const data = {
       status: existing?.status || UserStatus.ONLINE,
