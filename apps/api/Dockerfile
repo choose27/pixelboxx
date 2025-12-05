@@ -4,23 +4,18 @@ FROM node:20-alpine AS builder
 # Set working directory to monorepo root
 WORKDIR /app
 
-# Copy root package files
+# Copy root package files first
 COPY package*.json ./
 COPY turbo.json ./
 
-# Copy workspace package files
-COPY apps/api/package*.json ./apps/api/
+# Copy the entire api app directory
+COPY apps/api ./apps/api/
 
 # Create packages directory structure (workspaces expects these)
 RUN mkdir -p packages/config packages/shared packages/ui
 
 # Install dependencies (this installs all workspace dependencies)
 RUN npm ci
-
-# Copy api source code
-COPY apps/api/prisma ./apps/api/prisma/
-COPY apps/api/src ./apps/api/src/
-COPY apps/api/tsconfig*.json ./apps/api/
 
 # Generate Prisma Client (dummy URL for build time)
 WORKDIR /app/apps/api
@@ -38,11 +33,11 @@ WORKDIR /app
 COPY package*.json ./
 COPY turbo.json ./
 
-# Copy workspace package files
-COPY apps/api/package*.json ./apps/api/
-
-# Create packages directory structure (workspaces expects these)
+# Create packages directory structure
 RUN mkdir -p packages/config packages/shared packages/ui
+
+# Copy only package.json from api (for workspace resolution)
+COPY apps/api/package*.json ./apps/api/
 
 # Install production dependencies only
 RUN npm ci --only=production
