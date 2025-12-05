@@ -37,10 +37,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex gap-sm">
-                <Link href="/editor">
+                <Link href="/login">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
-                <Link href="/editor">
+                <Link href="/signup">
                   <Button variant="primary">Get Started</Button>
                 </Link>
               </div>
@@ -87,7 +87,7 @@ export default function Home() {
                 className="mt-xl flex flex-wrap justify-center gap-md animate-fadeInUp"
                 style={{ animationDelay: "0.6s" }}
               >
-                <Link href="/editor">
+                <Link href="/signup">
                   <Button variant="primary" size="large">
                     Create Your PixelPage
                     <svg
