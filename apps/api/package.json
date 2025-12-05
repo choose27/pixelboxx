@@ -4,6 +4,8 @@
   "description": "NestJS backend API for PixelBoxx.",
   "main": "index.js",
   "scripts": {
+    "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",

@@ -2,6 +2,7 @@
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 watchPaths = ["apps/api/**"]
+nixpacksConfigPath = ""
 
 [deploy]
 startCommand = "sh -c 'cd apps/api && npx prisma migrate deploy && npm run start:prod'"
