@@ -3,6 +3,11 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  constructor() {
+    // Pass empty options - Prisma will use prisma.config.ts
+    super();
+  }
+
   async onModuleInit() {
     await this.$connect();
   }
