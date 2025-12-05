@@ -112,5 +112,3 @@ Turbo handles:
 TBD
 
 ---
-
-*Built with ❤️ by a 12-year-old's vision, her dad's infrastructure chops, and Claude's design skills.*
