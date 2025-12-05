@@ -8,11 +8,46 @@ interface PageProps {
   };
 }
 
-async function getProfile(username: string) {
+interface ProfileApiResponse {
+  username: string;
+  displayName?: string | null;
+  avatarUrl?: string | null;
+  pixelPage?: any;
+}
+
+interface ProfileData {
+  username: string;
+  displayName?: string | null;
+  avatarUrl?: string | null;
+  pixelPage: {
+    id: string;
+    customCss: string | null;
+    bio: string | null;
+    musicUrl: string | null;
+    isPublic: boolean;
+    sections: any[];
+  };
+}
+
+async function getProfile(username: string): Promise<ProfileData | null> {
   try {
-    return await pixelPagesApi.getByUsername(username);
+    const data = await pixelPagesApi.getByUsername(username) as ProfileApiResponse;
+
+    // If pixelPage doesn't exist yet, create a default one
+    if (!data.pixelPage) {
+      data.pixelPage = {
+        id: 'default',
+        customCss: null,
+        bio: null,
+        musicUrl: null,
+        isPublic: true,
+        sections: [],
+      };
+    }
+
+    return data as ProfileData;
   } catch (error: any) {
-    if (error.status === 404) {
+    if (error.status === 404 || error.status === 403) {
       return null;
     }
     throw error;
@@ -49,6 +84,6 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: `${profile.displayName || username} (@${username}) - PixelBoxx`,
-    description: profile.pixelPage.bio || `Check out ${username}'s PixelPage on PixelBoxx!`,
+    description: profile.pixelPage?.bio || `Check out ${username}'s PixelPage on PixelBoxx!`,
   };
 }

@@ -30,7 +30,7 @@ export function GuestbookSection({ username }: GuestbookSectionProps) {
 
   const loadEntries = async () => {
     try {
-      const response = await guestbookApi.getEntries(username, 1, 10);
+      const response = await guestbookApi.getEntries(username, 1, 10) as { entries: GuestbookEntry[] };
       setEntries(response.entries || []);
     } catch (error) {
       console.error('Failed to load guestbook entries:', error);
