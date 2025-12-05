@@ -1,15 +1,15 @@
-import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationType } from '@prisma/client';
 import { formatNotification } from './templates/notification-templates';
 import { UpdateNotificationPreferencesDto } from './dto/update-preferences.dto';
-import { ClientProxy } from '@nestjs/microservices';
+import { NatsService } from '../nats/nats.service';
 
 @Injectable()
 export class NotificationsService {
   constructor(
     private prisma: PrismaService,
-    @Inject('NATS_CLIENT') private natsClient: ClientProxy,
+    private natsService: NatsService,
   ) {}
 
   /**
@@ -49,7 +49,7 @@ export class NotificationsService {
    */
   private async publishNotification(userId: string, notification: any) {
     const subject = `pixelboxx.users.${userId}.notifications`;
-    this.natsClient.emit(subject, notification);
+    await this.natsService.publish(subject, notification);
   }
 
   /**
