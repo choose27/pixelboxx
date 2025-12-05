@@ -10,7 +10,9 @@ COPY turbo.json ./
 
 # Copy workspace package files
 COPY apps/api/package*.json ./apps/api/
-COPY packages ./packages
+
+# Create packages directory structure (workspaces expects these)
+RUN mkdir -p packages/config packages/shared packages/ui
 
 # Install dependencies (this installs all workspace dependencies)
 RUN npm ci
@@ -38,7 +40,9 @@ COPY turbo.json ./
 
 # Copy workspace package files
 COPY apps/api/package*.json ./apps/api/
-COPY packages ./packages
+
+# Create packages directory structure (workspaces expects these)
+RUN mkdir -p packages/config packages/shared packages/ui
 
 # Install production dependencies only
 RUN npm ci --only=production
